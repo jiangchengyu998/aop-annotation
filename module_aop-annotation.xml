@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_aop-annotation" default="compile.module.aop-annotation">
+  <dirname property="module.aop-annotation.basedir" file="${ant.file.module_aop-annotation}"/>
+  
+  <property name="module.jdk.home.aop-annotation" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.aop-annotation" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.aop-annotation" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.aop-annotation" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="aop-annotation.output.dir" value="${module.aop-annotation.basedir}/out/production/aop-annotation"/>
+  <property name="aop-annotation.testoutput.dir" value="${module.aop-annotation.basedir}/out/test/aop-annotation"/>
+  
+  <path id="aop-annotation.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="aop-annotation.module.production.classpath">
+    <path refid="${module.jdk.classpath.aop-annotation}"/>
+    <path refid="library.spring-4.3.18.release.classpath"/>
+    <path refid="library.aspectjweaver-1.8.13.classpath"/>
+    <path refid="library.spring-web-4.3.18.release.classpath"/>
+    <path refid="library.tomcat_7.0.63.classpath"/>
+  </path>
+  
+  <path id="aop-annotation.runtime.production.module.classpath">
+    <pathelement location="${aop-annotation.output.dir}"/>
+    <path refid="library.spring-4.3.18.release.classpath"/>
+    <path refid="library.aspectjweaver-1.8.13.classpath"/>
+    <path refid="library.spring-web-4.3.18.release.classpath"/>
+  </path>
+  
+  <path id="aop-annotation.module.classpath">
+    <path refid="${module.jdk.classpath.aop-annotation}"/>
+    <pathelement location="${aop-annotation.output.dir}"/>
+    <path refid="library.spring-4.3.18.release.classpath"/>
+    <path refid="library.aspectjweaver-1.8.13.classpath"/>
+    <path refid="library.spring-web-4.3.18.release.classpath"/>
+    <path refid="library.tomcat_7.0.63.classpath"/>
+  </path>
+  
+  <path id="aop-annotation.runtime.module.classpath">
+    <pathelement location="${aop-annotation.testoutput.dir}"/>
+    <pathelement location="${aop-annotation.output.dir}"/>
+    <path refid="library.spring-4.3.18.release.classpath"/>
+    <path refid="library.aspectjweaver-1.8.13.classpath"/>
+    <path refid="library.spring-web-4.3.18.release.classpath"/>
+    <path refid="library.tomcat_7.0.63.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.aop-annotation">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.aop-annotation">
+    <patternset refid="excluded.from.module.aop-annotation"/>
+  </patternset>
+  
+  <path id="aop-annotation.module.sourcepath">
+    <dirset dir="${module.aop-annotation.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.aop-annotation" depends="compile.module.aop-annotation.production,compile.module.aop-annotation.tests" description="Compile module aop-annotation"/>
+  
+  <target name="compile.module.aop-annotation.production" depends="register.custom.compilers" description="Compile module aop-annotation; production classes">
+    <mkdir dir="${aop-annotation.output.dir}"/>
+    <javac2 destdir="${aop-annotation.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.aop-annotation}/javac">
+      <compilerarg line="${compiler.args.aop-annotation}"/>
+      <bootclasspath refid="aop-annotation.module.bootclasspath"/>
+      <classpath refid="aop-annotation.module.production.classpath"/>
+      <src refid="aop-annotation.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.aop-annotation"/>
+    </javac2>
+    
+    <copy todir="${aop-annotation.output.dir}">
+      <fileset dir="${module.aop-annotation.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.aop-annotation.tests" depends="register.custom.compilers,compile.module.aop-annotation.production" description="compile module aop-annotation; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.aop-annotation" description="cleanup module">
+    <delete dir="${aop-annotation.output.dir}"/>
+    <delete dir="${aop-annotation.testoutput.dir}"/>
+  </target>
+</project>
